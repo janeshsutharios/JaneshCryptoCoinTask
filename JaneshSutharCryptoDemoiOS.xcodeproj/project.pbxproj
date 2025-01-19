@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -46,11 +46,6 @@
 		10405A562D3D67D30028CE7E /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		10405A6B2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JaneshSutharCryptoDemoiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		10405A6D2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JaneshSutharCryptoDemoiOSTests.swift; sourceTree = "<group>"; };
-		10DB16E92D3D75F400C78B02 /* Presentation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Presentation; path = ../../../../Documents/Packages/Presentation; sourceTree = "<group>"; };
-		10DB16EA2D3D75F400C78B02 /* Data */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Data; path = ../../../../Documents/Packages/Data; sourceTree = "<group>"; };
-		10DB16EB2D3D75F400C78B02 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Domain; path = ../../../../Documents/Packages/Domain; sourceTree = "<group>"; };
-		10DB16EC2D3D75F400C78B02 /* Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Common; path = ../../../../Documents/Packages/Common; sourceTree = "<group>"; };
-		10DB16ED2D3D75F400C78B02 /* Infrastructure */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Infrastructure; path = ../../../../Documents/Packages/Infrastructure; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,11 +124,6 @@
 		10405A4A2D3D67D20028CE7E /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				10DB16EC2D3D75F400C78B02 /* Common */,
-				10DB16EA2D3D75F400C78B02 /* Data */,
-				10DB16EB2D3D75F400C78B02 /* Domain */,
-				10DB16ED2D3D75F400C78B02 /* Infrastructure */,
-				10DB16E92D3D75F400C78B02 /* Presentation */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -245,11 +235,6 @@
 			);
 			mainGroup = 10405A1E2D3D67900028CE7E;
 			packageReferences = (
-				10DB16DA2D3D756000C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Common" */,
-				10DB16DD2D3D757300C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Data" */,
-				10DB16E02D3D758600C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Presentation" */,
-				10DB16E32D3D75CC00C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Domain" */,
-				10DB16E62D3D75DA00C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Infrastructure" */,
 			);
 			productRefGroup = 10405A282D3D67900028CE7E /* Products */;
 			projectDirPath = "";
@@ -580,29 +565,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		10DB16DA2D3D756000C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Common" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../Documents/Packages/Common;
-		};
-		10DB16DD2D3D757300C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Data" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../Documents/Packages/Data;
-		};
-		10DB16E02D3D758600C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Presentation" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../Documents/Packages/Presentation;
-		};
-		10DB16E32D3D75CC00C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Domain" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../Documents/Packages/Domain;
-		};
-		10DB16E62D3D75DA00C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Infrastructure" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../Documents/Packages/Infrastructure;
-		};
-/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		10DB16DB2D3D756000C78B02 /* Common */ = {
