@@ -42,10 +42,10 @@ The CryptoFinder App is a user-friendly cryptocurrency coin listing application 
 ## Screenshots
 
 #### CryptoCoinsList Screen
-<img src="https://github.com/JaneshSuthariOS/cryto/blob/main/CryptoCoin/Screenshots/CryptoCoinListScreen.png" alt="CryptoCoinsList Screen" width="240" />
+<img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/Dashboard.png" alt="CryptoCoinsList Screen" width="240" />
 
 #### Filter Coins by Status/Type View
-<img src="https://github.com/JaneshSuthariOS/cryto/blob/main/CryptoCoin/Screenshots/FilterView.png" alt="Filter Coins by Status/Type View" width="240" />
+<img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/Filter.png" alt="Filter Coins by Status/Type View" width="240" />
 
 
 ## Architecture
@@ -172,5 +172,5 @@ For inquiries or feedback, please reach out:
 - **Email**: [janesh.stack@gmail.com](mailto:janesh.stack@gmail.com)
 - **GitHub**: [JaneshSuthar](https://github.com/janeshsutharios)
 
-Feel free to get in touch for any questions or suggestions regarding the CryptoFinder app!
+Feel free to get in touch for any questions or suggestions regarding the Crypto app!
 
