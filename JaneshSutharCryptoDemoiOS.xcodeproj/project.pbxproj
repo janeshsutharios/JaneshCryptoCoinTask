@@ -46,6 +46,11 @@
 		10405A562D3D67D30028CE7E /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		10405A6B2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JaneshSutharCryptoDemoiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		10405A6D2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JaneshSutharCryptoDemoiOSTests.swift; sourceTree = "<group>"; };
+		10B78E8F2D3D772E00DA5E48 /* Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Common; sourceTree = "<group>"; };
+		10B78E902D3D772E00DA5E48 /* Infrastructure */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Infrastructure; sourceTree = "<group>"; };
+		10B78E912D3D772E00DA5E48 /* Presentation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Presentation; sourceTree = "<group>"; };
+		10B78E922D3D772E00DA5E48 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Domain; sourceTree = "<group>"; };
+		10B78E932D3D772F00DA5E48 /* Data */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Data; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +129,11 @@
 		10405A4A2D3D67D20028CE7E /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				10B78E8F2D3D772E00DA5E48 /* Common */,
+				10B78E932D3D772F00DA5E48 /* Data */,
+				10B78E922D3D772E00DA5E48 /* Domain */,
+				10B78E902D3D772E00DA5E48 /* Infrastructure */,
+				10B78E912D3D772E00DA5E48 /* Presentation */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
