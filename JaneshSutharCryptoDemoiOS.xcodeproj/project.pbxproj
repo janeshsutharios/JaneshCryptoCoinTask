@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,21 +11,16 @@
 		10405A582D3D67D30028CE7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10405A412D3D67D20028CE7E /* Assets.xcassets */; };
 		10405A592D3D67D30028CE7E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10405A422D3D67D20028CE7E /* Main.storyboard */; };
 		10405A5A2D3D67D30028CE7E /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10405A442D3D67D20028CE7E /* Launch.storyboard */; };
-		10405A5E2D3D67D30028CE7E /* Common in Resources */ = {isa = PBXBuildFile; fileRef = 10405A4B2D3D67D20028CE7E /* Common */; };
-		10405A5F2D3D67D30028CE7E /* Infrastructure in Resources */ = {isa = PBXBuildFile; fileRef = 10405A4C2D3D67D30028CE7E /* Infrastructure */; };
-		10405A602D3D67D30028CE7E /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 10405A4D2D3D67D30028CE7E /* Data */; };
-		10405A612D3D67D30028CE7E /* Domain in Resources */ = {isa = PBXBuildFile; fileRef = 10405A4E2D3D67D30028CE7E /* Domain */; };
-		10405A622D3D67D30028CE7E /* Presentation in Resources */ = {isa = PBXBuildFile; fileRef = 10405A4F2D3D67D30028CE7E /* Presentation */; };
 		10405A632D3D67D30028CE7E /* Dashboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 10405A512D3D67D30028CE7E /* Dashboard.png */; };
 		10405A642D3D67D30028CE7E /* Filter.png in Resources */ = {isa = PBXBuildFile; fileRef = 10405A522D3D67D30028CE7E /* Filter.png */; };
 		10405A652D3D67D30028CE7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A552D3D67D30028CE7E /* AppDelegate.swift */; };
 		10405A662D3D67D30028CE7E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A562D3D67D30028CE7E /* SceneDelegate.swift */; };
 		10405A6E2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A6D2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.swift */; };
-		10773C6C2D3D6FB0002D6207 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C6B2D3D6FB0002D6207 /* Common */; };
-		10773C6E2D3D6FB0002D6207 /* Data in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C6D2D3D6FB0002D6207 /* Data */; };
-		10773C702D3D6FB0002D6207 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C6F2D3D6FB0002D6207 /* Domain */; };
-		10773C722D3D6FB0002D6207 /* Infrastructure in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C712D3D6FB0002D6207 /* Infrastructure */; };
-		10773C742D3D6FB0002D6207 /* Presentation in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C732D3D6FB0002D6207 /* Presentation */; };
+		10DB16DC2D3D756000C78B02 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 10DB16DB2D3D756000C78B02 /* Common */; };
+		10DB16DF2D3D757300C78B02 /* Data in Frameworks */ = {isa = PBXBuildFile; productRef = 10DB16DE2D3D757300C78B02 /* Data */; };
+		10DB16E22D3D758600C78B02 /* Presentation in Frameworks */ = {isa = PBXBuildFile; productRef = 10DB16E12D3D758600C78B02 /* Presentation */; };
+		10DB16E52D3D75CC00C78B02 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 10DB16E42D3D75CC00C78B02 /* Domain */; };
+		10DB16E82D3D75DA00C78B02 /* Infrastructure in Frameworks */ = {isa = PBXBuildFile; productRef = 10DB16E72D3D75DA00C78B02 /* Infrastructure */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,17 +40,17 @@
 		10405A412D3D67D20028CE7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		10405A432D3D67D20028CE7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		10405A442D3D67D20028CE7E /* Launch.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
-		10405A4B2D3D67D20028CE7E /* Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Common; sourceTree = "<group>"; };
-		10405A4C2D3D67D30028CE7E /* Infrastructure */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Infrastructure; sourceTree = "<group>"; };
-		10405A4D2D3D67D30028CE7E /* Data */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Data; sourceTree = "<group>"; };
-		10405A4E2D3D67D30028CE7E /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Domain; sourceTree = "<group>"; };
-		10405A4F2D3D67D30028CE7E /* Presentation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Presentation; sourceTree = "<group>"; };
 		10405A512D3D67D30028CE7E /* Dashboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Dashboard.png; sourceTree = "<group>"; };
 		10405A522D3D67D30028CE7E /* Filter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Filter.png; sourceTree = "<group>"; };
 		10405A552D3D67D30028CE7E /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		10405A562D3D67D30028CE7E /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		10405A6B2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JaneshSutharCryptoDemoiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		10405A6D2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JaneshSutharCryptoDemoiOSTests.swift; sourceTree = "<group>"; };
+		10DB16E92D3D75F400C78B02 /* Presentation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Presentation; path = ../../../../Documents/Packages/Presentation; sourceTree = "<group>"; };
+		10DB16EA2D3D75F400C78B02 /* Data */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Data; path = ../../../../Documents/Packages/Data; sourceTree = "<group>"; };
+		10DB16EB2D3D75F400C78B02 /* Domain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Domain; path = ../../../../Documents/Packages/Domain; sourceTree = "<group>"; };
+		10DB16EC2D3D75F400C78B02 /* Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Common; path = ../../../../Documents/Packages/Common; sourceTree = "<group>"; };
+		10DB16ED2D3D75F400C78B02 /* Infrastructure */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Infrastructure; path = ../../../../Documents/Packages/Infrastructure; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,11 +58,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10773C702D3D6FB0002D6207 /* Domain in Frameworks */,
-				10773C6E2D3D6FB0002D6207 /* Data in Frameworks */,
-				10773C6C2D3D6FB0002D6207 /* Common in Frameworks */,
-				10773C742D3D6FB0002D6207 /* Presentation in Frameworks */,
-				10773C722D3D6FB0002D6207 /* Infrastructure in Frameworks */,
+				10DB16E82D3D75DA00C78B02 /* Infrastructure in Frameworks */,
+				10DB16DF2D3D757300C78B02 /* Data in Frameworks */,
+				10DB16E22D3D758600C78B02 /* Presentation in Frameworks */,
+				10DB16E52D3D75CC00C78B02 /* Domain in Frameworks */,
+				10DB16DC2D3D756000C78B02 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,11 +129,11 @@
 		10405A4A2D3D67D20028CE7E /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				10405A4B2D3D67D20028CE7E /* Common */,
-				10405A4C2D3D67D30028CE7E /* Infrastructure */,
-				10405A4D2D3D67D30028CE7E /* Data */,
-				10405A4E2D3D67D30028CE7E /* Domain */,
-				10405A4F2D3D67D30028CE7E /* Presentation */,
+				10DB16EC2D3D75F400C78B02 /* Common */,
+				10DB16EA2D3D75F400C78B02 /* Data */,
+				10DB16EB2D3D75F400C78B02 /* Domain */,
+				10DB16ED2D3D75F400C78B02 /* Infrastructure */,
+				10DB16E92D3D75F400C78B02 /* Presentation */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
@@ -193,11 +188,11 @@
 			);
 			name = JaneshSutharCryptoDemoiOS;
 			packageProductDependencies = (
-				10773C6B2D3D6FB0002D6207 /* Common */,
-				10773C6D2D3D6FB0002D6207 /* Data */,
-				10773C6F2D3D6FB0002D6207 /* Domain */,
-				10773C712D3D6FB0002D6207 /* Infrastructure */,
-				10773C732D3D6FB0002D6207 /* Presentation */,
+				10DB16DB2D3D756000C78B02 /* Common */,
+				10DB16DE2D3D757300C78B02 /* Data */,
+				10DB16E12D3D758600C78B02 /* Presentation */,
+				10DB16E42D3D75CC00C78B02 /* Domain */,
+				10DB16E72D3D75DA00C78B02 /* Infrastructure */,
 			);
 			productName = JaneshSutharCryptoDemoiOS;
 			productReference = 10405A272D3D67900028CE7E /* JaneshSutharCryptoDemoiOS.app */;
@@ -249,6 +244,13 @@
 				Base,
 			);
 			mainGroup = 10405A1E2D3D67900028CE7E;
+			packageReferences = (
+				10DB16DA2D3D756000C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Common" */,
+				10DB16DD2D3D757300C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Data" */,
+				10DB16E02D3D758600C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Presentation" */,
+				10DB16E32D3D75CC00C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Domain" */,
+				10DB16E62D3D75DA00C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Infrastructure" */,
+			);
 			productRefGroup = 10405A282D3D67900028CE7E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -266,15 +268,10 @@
 			files = (
 				10405A642D3D67D30028CE7E /* Filter.png in Resources */,
 				10405A632D3D67D30028CE7E /* Dashboard.png in Resources */,
-				10405A5E2D3D67D30028CE7E /* Common in Resources */,
-				10405A5F2D3D67D30028CE7E /* Infrastructure in Resources */,
 				10405A592D3D67D30028CE7E /* Main.storyboard in Resources */,
 				10405A582D3D67D30028CE7E /* Assets.xcassets in Resources */,
 				10405A572D3D67D30028CE7E /* Localizable.strings in Resources */,
 				10405A5A2D3D67D30028CE7E /* Launch.storyboard in Resources */,
-				10405A612D3D67D30028CE7E /* Domain in Resources */,
-				10405A622D3D67D30028CE7E /* Presentation in Resources */,
-				10405A602D3D67D30028CE7E /* Data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,26 +581,49 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		10DB16DA2D3D756000C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Common" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Documents/Packages/Common;
+		};
+		10DB16DD2D3D757300C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Data" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Documents/Packages/Data;
+		};
+		10DB16E02D3D758600C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Presentation" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Documents/Packages/Presentation;
+		};
+		10DB16E32D3D75CC00C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Domain" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Documents/Packages/Domain;
+		};
+		10DB16E62D3D75DA00C78B02 /* XCLocalSwiftPackageReference "../../Documents/Packages/Infrastructure" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../Documents/Packages/Infrastructure;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		10773C6B2D3D6FB0002D6207 /* Common */ = {
+		10DB16DB2D3D756000C78B02 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
 		};
-		10773C6D2D3D6FB0002D6207 /* Data */ = {
+		10DB16DE2D3D757300C78B02 /* Data */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Data;
 		};
-		10773C6F2D3D6FB0002D6207 /* Domain */ = {
+		10DB16E12D3D758600C78B02 /* Presentation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Presentation;
+		};
+		10DB16E42D3D75CC00C78B02 /* Domain */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Domain;
 		};
-		10773C712D3D6FB0002D6207 /* Infrastructure */ = {
+		10DB16E72D3D75DA00C78B02 /* Infrastructure */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Infrastructure;
-		};
-		10773C732D3D6FB0002D6207 /* Presentation */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Presentation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
