@@ -62,42 +62,6 @@ This project follows the **Clean Architecture - Model-View-ViewModel** architect
 
 - **Infrastructure Layer**: Provides foundational services like network communication and configuration.
 
-
-## Folder Structure
-
-- 
-  ```bash
-
-
-## Installation
-
-To set up the CryptoFinder App on your local machine, follow these steps:
-
-### Prerequisites
-
-- Ensure you have the latest version of Xcode installed.
-- Clone the repository to your local machine.
-
-### Steps
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/janesh.git
-
-2. Navigate into the project directory:
-
-   ```bash
-   cd CleanArchitecture-MVVM-CryptoCoinsApp
-
-3. Open the Xcode project:
-
-   ```bash
-   open CryptoCoin.xcworkspace
-
-4. Run the app on a simulator or a physical device by pressing Cmd + R.
-
-
 ## Usage
 
 To use the CryptoFinder app, follow these steps:
@@ -128,7 +92,7 @@ Contributions to the CryptoFinder app are welcome and encouraged! To contribute 
    Clone your forked repository to your local machine using the command:
 
    ```bash
-   git clone https://github.com/Janesh/CleanArchitecture-MVVM-CryptoCoinsApp.git
+   git clone https://github.com/janeshsutharios/JaneshCryptoCoinTask
 
 3. Create a New Branch: Navigate to the project directory and create a new branch for your feature or bug fix:
 

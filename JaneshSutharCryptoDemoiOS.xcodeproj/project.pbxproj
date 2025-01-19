@@ -11,9 +11,6 @@
 		10405A582D3D67D30028CE7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10405A412D3D67D20028CE7E /* Assets.xcassets */; };
 		10405A592D3D67D30028CE7E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10405A422D3D67D20028CE7E /* Main.storyboard */; };
 		10405A5A2D3D67D30028CE7E /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 10405A442D3D67D20028CE7E /* Launch.storyboard */; };
-		10405A5B2D3D67D30028CE7E /* JaneshSutharCryptoDemoiOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A462D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSUITestsLaunchTests.swift */; };
-		10405A5C2D3D67D30028CE7E /* JaneshSutharCryptoDemoiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A472D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSUITests.swift */; };
-		10405A5D2D3D67D30028CE7E /* JaneshSutharCryptoDemoiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A492D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSTests.swift */; };
 		10405A5E2D3D67D30028CE7E /* Common in Resources */ = {isa = PBXBuildFile; fileRef = 10405A4B2D3D67D20028CE7E /* Common */; };
 		10405A5F2D3D67D30028CE7E /* Infrastructure in Resources */ = {isa = PBXBuildFile; fileRef = 10405A4C2D3D67D30028CE7E /* Infrastructure */; };
 		10405A602D3D67D30028CE7E /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 10405A4D2D3D67D30028CE7E /* Data */; };
@@ -24,6 +21,11 @@
 		10405A652D3D67D30028CE7E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A552D3D67D30028CE7E /* AppDelegate.swift */; };
 		10405A662D3D67D30028CE7E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A562D3D67D30028CE7E /* SceneDelegate.swift */; };
 		10405A6E2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10405A6D2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests.swift */; };
+		10773C6C2D3D6FB0002D6207 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C6B2D3D6FB0002D6207 /* Common */; };
+		10773C6E2D3D6FB0002D6207 /* Data in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C6D2D3D6FB0002D6207 /* Data */; };
+		10773C702D3D6FB0002D6207 /* Domain in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C6F2D3D6FB0002D6207 /* Domain */; };
+		10773C722D3D6FB0002D6207 /* Infrastructure in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C712D3D6FB0002D6207 /* Infrastructure */; };
+		10773C742D3D6FB0002D6207 /* Presentation in Frameworks */ = {isa = PBXBuildFile; productRef = 10773C732D3D6FB0002D6207 /* Presentation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,9 +45,6 @@
 		10405A412D3D67D20028CE7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		10405A432D3D67D20028CE7E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		10405A442D3D67D20028CE7E /* Launch.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
-		10405A462D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JaneshSutharCryptoDemoiOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		10405A472D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JaneshSutharCryptoDemoiOSUITests.swift; sourceTree = "<group>"; };
-		10405A492D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JaneshSutharCryptoDemoiOSTests.swift; sourceTree = "<group>"; };
 		10405A4B2D3D67D20028CE7E /* Common */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Common; sourceTree = "<group>"; };
 		10405A4C2D3D67D30028CE7E /* Infrastructure */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Infrastructure; sourceTree = "<group>"; };
 		10405A4D2D3D67D30028CE7E /* Data */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Data; sourceTree = "<group>"; };
@@ -64,6 +63,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10773C702D3D6FB0002D6207 /* Domain in Frameworks */,
+				10773C6E2D3D6FB0002D6207 /* Data in Frameworks */,
+				10773C6C2D3D6FB0002D6207 /* Common in Frameworks */,
+				10773C742D3D6FB0002D6207 /* Presentation in Frameworks */,
+				10773C722D3D6FB0002D6207 /* Infrastructure in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +87,7 @@
 				10405A292D3D67900028CE7E /* JaneshSutharCryptoDemoiOS */,
 				10405A6C2D3D686E0028CE7E /* JaneshSutharCryptoDemoiOSTests */,
 				10405A282D3D67900028CE7E /* Products */,
+				10773C6A2D3D6FB0002D6207 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,10 +103,8 @@
 		10405A292D3D67900028CE7E /* JaneshSutharCryptoDemoiOS */ = {
 			isa = PBXGroup;
 			children = (
-				10405A542D3D67D30028CE7E /* Application */,
-				10405A482D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSTests */,
-				10405A452D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSUITests */,
 				10405A4A2D3D67D20028CE7E /* Packages */,
+				10405A542D3D67D30028CE7E /* Application */,
 				10405A3E2D3D67D20028CE7E /* Resources */,
 				10405A502D3D67D30028CE7E /* Screenshots */,
 				10405A382D3D67920028CE7E /* Info.plist */,
@@ -126,23 +129,6 @@
 				10405A402D3D67D20028CE7E /* Localizable.strings */,
 			);
 			path = Locale;
-			sourceTree = "<group>";
-		};
-		10405A452D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSUITests */ = {
-			isa = PBXGroup;
-			children = (
-				10405A462D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSUITestsLaunchTests.swift */,
-				10405A472D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSUITests.swift */,
-			);
-			path = JaneshSutharCryptoDemoiOSUITests;
-			sourceTree = "<group>";
-		};
-		10405A482D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSTests */ = {
-			isa = PBXGroup;
-			children = (
-				10405A492D3D67D20028CE7E /* JaneshSutharCryptoDemoiOSTests.swift */,
-			);
-			path = JaneshSutharCryptoDemoiOSTests;
 			sourceTree = "<group>";
 		};
 		10405A4A2D3D67D20028CE7E /* Packages */ = {
@@ -183,6 +169,13 @@
 			path = JaneshSutharCryptoDemoiOSTests;
 			sourceTree = "<group>";
 		};
+		10773C6A2D3D6FB0002D6207 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -199,6 +192,13 @@
 			dependencies = (
 			);
 			name = JaneshSutharCryptoDemoiOS;
+			packageProductDependencies = (
+				10773C6B2D3D6FB0002D6207 /* Common */,
+				10773C6D2D3D6FB0002D6207 /* Data */,
+				10773C6F2D3D6FB0002D6207 /* Domain */,
+				10773C712D3D6FB0002D6207 /* Infrastructure */,
+				10773C732D3D6FB0002D6207 /* Presentation */,
+			);
 			productName = JaneshSutharCryptoDemoiOS;
 			productReference = 10405A272D3D67900028CE7E /* JaneshSutharCryptoDemoiOS.app */;
 			productType = "com.apple.product-type.application";
@@ -294,9 +294,6 @@
 			files = (
 				10405A662D3D67D30028CE7E /* SceneDelegate.swift in Sources */,
 				10405A652D3D67D30028CE7E /* AppDelegate.swift in Sources */,
-				10405A5D2D3D67D30028CE7E /* JaneshSutharCryptoDemoiOSTests.swift in Sources */,
-				10405A5B2D3D67D30028CE7E /* JaneshSutharCryptoDemoiOSUITestsLaunchTests.swift in Sources */,
-				10405A5C2D3D67D30028CE7E /* JaneshSutharCryptoDemoiOSUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,9 +519,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.crypto.demo.JaneshSutharCryptoDemoiOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JaneshSutharCryptoDemoiOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JaneshSutharCryptoDemoiOS";
 			};
 			name = Debug;
@@ -540,9 +541,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.crypto.demo.JaneshSutharCryptoDemoiOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JaneshSutharCryptoDemoiOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JaneshSutharCryptoDemoiOS";
 			};
 			name = Release;
@@ -578,6 +583,29 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		10773C6B2D3D6FB0002D6207 /* Common */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Common;
+		};
+		10773C6D2D3D6FB0002D6207 /* Data */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Data;
+		};
+		10773C6F2D3D6FB0002D6207 /* Domain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Domain;
+		};
+		10773C712D3D6FB0002D6207 /* Infrastructure */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Infrastructure;
+		};
+		10773C732D3D6FB0002D6207 /* Presentation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Presentation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 10405A1F2D3D67900028CE7E /* Project object */;
 }
