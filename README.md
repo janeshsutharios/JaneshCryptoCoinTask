@@ -6,7 +6,7 @@ The **CryptoCoins App** is a mobile application built with UIKit, designed to of
 <div style="display: flex; gap: 10px;">
   <img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/Dashboard.png" alt="CryptoCoinsList Screen" width="240" />
   <img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/Filter.png" alt="Filter Coins by Status/Type View" width="240" />
-  <img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/CLEAN+MVVM.png" alt="Arch - Clean+MVVM" width="350" />
+  <img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/CLEAN+MVVM.png" alt="Arch - Clean+MVVM" width="240" />
 </div>
 
 ## Table of Contents
