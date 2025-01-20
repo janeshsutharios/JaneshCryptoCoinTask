@@ -1,19 +1,17 @@
-//
-//  NewsRepository.swift
-//  NewsApp
-//
-//  Created by Janesh Suthar.
-//
 import Foundation
 import Domain
 
-/* APIService Manage the logic for fetching crypto coins list from the API */
 public class NetworkServiceManager: APIServiceProtocol {
-    public init() {}
+    private let networkManager: NetworkManager
+
+    public init(networkManager: NetworkManager) {
+        self.networkManager = networkManager
+    }
+
     public func fetchCryptoCoins() async throws -> [CryptoCoinEntity] {
-        let endpoint = Endpoint.createGETEndpoint(path: "", queryItems: [])
+        let endpoint = Endpoint.createGETEndpoint(path: "/crypto/coins", queryItems: [])
         do {
-            let cryptoCoins: [CryptoCoinEntity] = try await NetworkManager.shared.request(endpoint: endpoint)
+            let cryptoCoins: [CryptoCoinEntity] = try await networkManager.request(endpoint: endpoint)
             return cryptoCoins
         } catch let error as NetworkError {
             throw error
@@ -22,4 +20,3 @@ public class NetworkServiceManager: APIServiceProtocol {
         }
     }
 }
-

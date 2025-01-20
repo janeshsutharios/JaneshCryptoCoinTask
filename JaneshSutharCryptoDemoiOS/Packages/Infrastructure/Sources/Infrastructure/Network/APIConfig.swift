@@ -1,10 +1,3 @@
-//
-//  NetworkManager.swift
-//  NewsApp
-//
-//  Created by Janesh Suthar.
-//
-
 import Foundation
 
 public struct APIConfig {

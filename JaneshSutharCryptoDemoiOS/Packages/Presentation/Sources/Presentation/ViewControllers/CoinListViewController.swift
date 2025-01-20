@@ -22,7 +22,8 @@ class CryptoListViewController: UIViewController {
     
     //MARK: - Private Methods
     private func initializeViewModel() {
-        let apiService = NetworkServiceManager()
+        let networkManager = NetworkManager()
+        let apiService = NetworkServiceManager(networkManager: networkManager)
         let networkDataSource = CryptoNetworkDataSourceImpl(apiService: apiService)
         let coreDataHelper = CoreDataHelper()
         let localDataSource = CryptoLocalDataSourceImpl(coreDataHelper: coreDataHelper)

@@ -1,51 +1,43 @@
-//
-//  APIManager.swift
-//  NewsApp
-//
-//  Created by Janesh Suthar.
-//
-
 import Foundation
 import Common
+
 public class NetworkManager {
-    
-    public static let shared = NetworkManager()
-    
-    private init() {}
-    
+    public init() {}
+
     // Optimized request method using async/await
-    func request<T: Decodable>(endpoint: Endpoint) async throws -> T {
+    public func request<T: Decodable>(endpoint: Endpoint) async throws -> T {
         // Validate the URL
         guard let url = URL(string: endpoint.fullUrl) else {
             throw NetworkError.invalidURL
         }
-        
+
         // Check if there's an internet connection
         guard Reachability.isConnectedToNetwork() else {
             throw NetworkError.noInternet
         }
-        
+
         // Setup the request
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+        request.allHTTPHeaderFields = endpoint.headers
+
         // Perform the network request and handle the response
         let (data, response) = try await URLSession.shared.data(for: request)
-        
+
         // Handle the response
         try handleResponse(response, data: data)
-        
+
         // Decode and return the result
         return try decodeResponse(T.self, data: data)
     }
-    
+
     // Handle HTTP response status codes
     private func handleResponse(_ response: URLResponse?, data: Data?) throws {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.requestFailed(statusCode: 0)
         }
-        
+
         switch httpResponse.statusCode {
         case 200...299:
             if data == nil {
@@ -57,7 +49,7 @@ public class NetworkManager {
             throw NetworkError.requestFailed(statusCode: httpResponse.statusCode)
         }
     }
-    
+
     // Decode the data into the appropriate model
     private func decodeResponse<T: Decodable>(_ type: T.Type, data: Data) throws -> T {
         do {
@@ -68,4 +60,3 @@ public class NetworkManager {
         }
     }
 }
-
