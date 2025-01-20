@@ -1,6 +1,5 @@
 //
 //  NetworkError.swift
-//  NewsApp
 //
 //  Created by Janesh Suthar.
 //

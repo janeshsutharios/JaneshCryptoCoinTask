@@ -8,42 +8,6 @@
 import Foundation
 import Domain
 import CoreData
-
-//public class CoreDataHelper {
-//    public static let shared = CoreDataHelper()
-//    private init() {}
-//    
-//    lazy var persistentContainer: NSPersistentContainer = {
-//        
-//        guard let modelURL = Bundle.module.url(forResource: "CryptoCoin", withExtension: "momd"),
-//              let model = NSManagedObjectModel(contentsOf: modelURL) else {
-//            fatalError("Failed to load Core Data model")
-//        }
-//        let container = NSPersistentContainer(name: "CryptoCoin", managedObjectModel: model)
-//        container.loadPersistentStores { description, error in
-//            if let error = error {
-//                fatalError("Unresolved error \(error)")
-//            }
-//        }
-//        return container
-//    }()
-//    
-//    public var context: NSManagedObjectContext {
-//        return persistentContainer.viewContext
-//    }
-//    
-//    public func saveContext() {
-//        if context.hasChanges {
-//            do {
-//                try context.save()
-//            } catch {
-//                let nserror = error as NSError
-//                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-//            }
-//        }
-//    }
-//}
-import Foundation
 import CoreData
 
 public class CoreDataHelper {
