@@ -1,14 +1,18 @@
 # CryptoCoins App
 
 The **CryptoCoins App** is a mobile application built with UIKit, designed to offer users a well-organized and interactive list of cryptocurrency coins. Featuring a clean and user-friendly interface, the app enables users to easily explore a variety of crypto coins.
+## Screenshots
 
+<div style="display: flex; gap: 10px;">
+  <img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/Dashboard.png" alt="CryptoCoinsList Screen" width="240" />
+  <img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/Filter.png" alt="Filter Coins by Status/Type View" width="240" />
+</div>
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
 - [Architecture](#architecture)
-- [Screenshots](#screenshots)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
@@ -38,15 +42,6 @@ The CryptoFinder App is a user-friendly cryptocurrency coin listing application 
 
 3. **Search Functionality**:
    - User can search for coins by `name` or `symbol`.
-
-## Screenshots
-
-#### CryptoCoinsList Screen
-<img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/Dashboard.png" alt="CryptoCoinsList Screen" width="240" />
-
-#### Filter Coins by Status/Type View
-<img src="https://github.com/janeshsutharios/JaneshCryptoCoinTask/blob/main/JaneshSutharCryptoDemoiOS/Screenshots/Filter.png" alt="Filter Coins by Status/Type View" width="240" />
-
 
 ## Architecture
 
