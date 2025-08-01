@@ -8,7 +8,7 @@
 import Foundation
 import Domain
 
-public protocol CryptoLocalDataSource {
+public protocol CryptoLocalDataSource: Sendable {
     func fetchCryptoCoins() async throws -> [CryptoCoinEntity]
     func saveCryptoCoins(_ coins: [CryptoCoinEntity]) async throws
 }

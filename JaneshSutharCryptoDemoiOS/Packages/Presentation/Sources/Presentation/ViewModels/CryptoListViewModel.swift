@@ -7,7 +7,7 @@
 
 import Foundation
 import Common
-@preconcurrency import Domain
+import Domain
 
 @MainActor
 public final class CryptoListViewModel {

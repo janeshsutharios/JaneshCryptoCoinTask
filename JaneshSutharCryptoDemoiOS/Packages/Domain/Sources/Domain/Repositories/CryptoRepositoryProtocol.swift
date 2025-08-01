@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol CryptoRepositoryProtocol {
+public protocol CryptoRepositoryProtocol: Sendable {
     func getCryptoCoinsFromNetwork() async throws -> [CryptoCoinEntity]
     func getCryptoCoinsFromCache() async throws -> [CryptoCoinEntity]
     func saveCryptoCoinsIntoCache(_ coins: [CryptoCoinEntity]) async throws

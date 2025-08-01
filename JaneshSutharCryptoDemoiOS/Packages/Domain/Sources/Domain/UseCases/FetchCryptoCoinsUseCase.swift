@@ -7,7 +7,7 @@
 
 import Foundation
 
-open class FetchCryptoCoinsUseCase {
+public actor FetchCryptoCoinsUseCase {
     private let repository: CryptoRepositoryProtocol
 
     public init(repository: CryptoRepositoryProtocol) {
@@ -15,7 +15,7 @@ open class FetchCryptoCoinsUseCase {
     }
 
     // Fetch data either from network or local based on the flag
-    open func execute(fromNetwork: Bool) async throws -> [CryptoCoinEntity] {
+    public func execute(fromNetwork: Bool) async throws -> [CryptoCoinEntity] {
         if fromNetwork {
             // Fetch from network and save to local storage
             let networkCoins = try await repository.getCryptoCoinsFromNetwork()

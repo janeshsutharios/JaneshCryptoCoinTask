@@ -7,6 +7,6 @@
 
 import Foundation
 import Domain
-public protocol CryptoNetworkDataSource {
+public protocol CryptoNetworkDataSource: Sendable {
     func fetchCryptoCoins() async throws -> [CryptoCoinEntity]
 }

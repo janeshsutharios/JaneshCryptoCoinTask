@@ -1,7 +1,7 @@
 import Foundation
 import Domain
 
-public class NetworkServiceManager: APIServiceProtocol {
+public actor NetworkServiceManager: APIServiceProtocol {
     private let networkManager: NetworkManager
 
     public init(networkManager: NetworkManager) {

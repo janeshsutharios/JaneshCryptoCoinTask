@@ -8,9 +8,8 @@
 import Foundation
 import Domain
 import CoreData
-import CoreData
 
-public class CoreDataHelper {
+public actor CoreDataHelper {
     private let persistentContainer: NSPersistentContainer
 
     public init() {

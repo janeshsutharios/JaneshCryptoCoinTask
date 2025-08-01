@@ -10,7 +10,7 @@ import Domain
 import Common
 import Infrastructure
 
-public class CryptoNetworkDataSourceImpl: CryptoNetworkDataSource {
+public actor CryptoNetworkDataSourceImpl: CryptoNetworkDataSource {
     private let apiService: NetworkServiceManager
 
     public init(apiService: NetworkServiceManager) {

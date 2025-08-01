@@ -7,7 +7,7 @@
 
 import Foundation
 import Domain
-public class CryptoRepository: CryptoRepositoryProtocol {
+public actor CryptoRepository: CryptoRepositoryProtocol {
     
     private let networkDataSource: any CryptoNetworkDataSource
     private let localDataSource: any CryptoLocalDataSource
