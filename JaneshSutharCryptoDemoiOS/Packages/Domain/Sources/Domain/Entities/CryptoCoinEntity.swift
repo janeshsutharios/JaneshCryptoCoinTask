@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct CryptoCoinEntity: Decodable {
+public struct CryptoCoinEntity: Decodable, Sendable {
     public let name: String
     public let symbol: String
     public let type: String

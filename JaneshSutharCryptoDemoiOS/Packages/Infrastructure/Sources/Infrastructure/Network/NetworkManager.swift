@@ -1,7 +1,7 @@
 import Foundation
 import Common
 
-public class NetworkManager {
+public actor NetworkManager {
     public init() {}
 
     // Optimized request method using async/await

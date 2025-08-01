@@ -4,6 +4,7 @@ import Common
 import Data
 import Infrastructure
 
+@MainActor
 class CryptoListViewController: UIViewController {
     var viewModel: CryptoListViewModel!
     let tableView = UITableView()
@@ -14,14 +15,14 @@ class CryptoListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        setupUI()
-        initializeViewModel()
-        setupBindings()
-        viewModel.fetchCoins()
+        Task {
+            await initializeViewModel()
+        }
+
     }
     
     //MARK: - Private Methods
-    private func initializeViewModel() {
+    private func initializeViewModel() async {
         let networkManager = NetworkManager()
         let apiService = NetworkServiceManager(networkManager: networkManager)
         let networkDataSource = CryptoNetworkDataSourceImpl(apiService: apiService)
@@ -29,7 +30,11 @@ class CryptoListViewController: UIViewController {
         let localDataSource = CryptoLocalDataSourceImpl(coreDataHelper: coreDataHelper)
         let repository = CryptoRepository(networkDataSource: networkDataSource, localDataSource: localDataSource)
         let useCase = FetchCryptoCoinsUseCase(repository: repository)
-        viewModel = CryptoListViewModel(getCryptoCoinsUseCase: useCase)
+        viewModel = await CryptoListViewModel(getCryptoCoinsUseCase: useCase)
+        setupUI()
+        await viewModel.fetchCoins()
+        self.setupBindings()
+
     }
     
     private func setupUI() {

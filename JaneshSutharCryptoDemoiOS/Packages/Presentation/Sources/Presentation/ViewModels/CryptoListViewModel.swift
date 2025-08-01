@@ -7,9 +7,10 @@
 
 import Foundation
 import Common
-import Domain
+@preconcurrency import Domain
 
-public class CryptoListViewModel {
+@MainActor
+public final class CryptoListViewModel {
     
     public var allCoins: [CryptoCoinEntity] = []
     public var filteredCoins: [CryptoCoinEntity] = []
@@ -24,31 +25,29 @@ public class CryptoListViewModel {
     
     private let getCryptoCoinsUseCase: FetchCryptoCoinsUseCase
     
-    public init(getCryptoCoinsUseCase: FetchCryptoCoinsUseCase) {
+    public init(getCryptoCoinsUseCase: FetchCryptoCoinsUseCase) async {
         self.getCryptoCoinsUseCase = getCryptoCoinsUseCase
-        fetchCoins()
+        await fetchCoins()
     }
-    
-    public func fetchCoins() {
+   
+    public func fetchCoins() async {
         showLoader?()
-        Task {
-            do {
-                // Decide whether to fetch from network or local storage based on connectivity
-                let coins = try await fetchCoinsBasedOnNetworkStatus()
-                // Update UI with the fetched coins
-                self.allCoins = coins
-                self.filteredCoins = coins
-            } catch {
-                // Handle any error that occurs during fetching
-                self.manageError?("Error", error.localizedDescription)
-            }
-            self.reloadTableView?()
-            // Hide the loader after the operation is complete (whether it succeeded or failed)
-            self.hideLoader?()
+        do {
+            // Decide whether to fetch from network or local storage based on connectivity
+            let coins = try await fetchCoinsBasedOnNetworkStatus()
+            // Update UI with the fetched coins
+            self.allCoins = coins
+            self.filteredCoins = coins
+        } catch {
+            // Handle any error that occurs during fetching
+            self.manageError?("Error", error.localizedDescription)
         }
+        self.reloadTableView?()
+        // Hide the loader after the operation is complete (whether it succeeded or failed)
+        self.hideLoader?()
     }
     
-    private func fetchCoinsBasedOnNetworkStatus() async throws -> [CryptoCoinEntity] {
+    private nonisolated func fetchCoinsBasedOnNetworkStatus() async throws -> [CryptoCoinEntity] {
         if Reachability.isConnectedToNetwork() {
             // Fetch from the network if connected
             return try await getCryptoCoinsUseCase.execute(fromNetwork: true)

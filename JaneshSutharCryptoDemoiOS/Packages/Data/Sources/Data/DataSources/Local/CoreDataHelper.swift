@@ -38,7 +38,7 @@ public class CoreDataHelper {
     
     /// Saves a specific context
     public func save(context: NSManagedObjectContext) throws {
-        var saveError: Error? // Capture error outside the closure
+        var saveError: (any Error)? // Capture error outside the closure
         context.performAndWait {
             if context.hasChanges {
                 do {

@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import Domain
 
-public class CryptoLocalDataSourceImpl: CryptoLocalDataSource {
+public final class CryptoLocalDataSourceImpl: CryptoLocalDataSource {
     private let coreDataHelper: CoreDataHelper
 
     /// Pass an instance of `CoreDataHelper` to remove dependency on a singleton
@@ -34,6 +34,7 @@ public class CryptoLocalDataSourceImpl: CryptoLocalDataSource {
             }
         }
     }
+
     
     /// Saves crypto coins to the local database
     public func saveCryptoCoins(_ coins: [CryptoCoinEntity]) async throws {
@@ -42,7 +43,7 @@ public class CryptoLocalDataSourceImpl: CryptoLocalDataSource {
             context.perform {
                 do {
                     // Delete existing entries
-                    let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CryptoCoinCoreData.fetchRequest()
+                    let fetchRequest: NSFetchRequest<any NSFetchRequestResult> = CryptoCoinCoreData.fetchRequest()
                     let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
                     try context.execute(deleteRequest)
                     

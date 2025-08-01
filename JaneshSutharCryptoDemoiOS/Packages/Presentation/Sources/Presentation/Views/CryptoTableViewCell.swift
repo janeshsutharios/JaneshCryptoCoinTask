@@ -29,11 +29,11 @@ class CryptoTableViewCell: UITableViewCell {
     private func setupUI() {
         // Configure titleLabel
         titleLabel.font = UIFont.systemFont(ofSize: LayoutConstants.defaultFontSize, weight: .bold)
-        titleLabel.textColor = .black
+        titleLabel.textColor = .label
         
         // Configure subtitleLabel
         subtitleLabel.font = UIFont.systemFont(ofSize: LayoutConstants.mediumFontSize, weight: .regular)
-        subtitleLabel.textColor = .darkGray
+        subtitleLabel.textColor = .label
         
         // Configure rightImageView
         rightImageView.contentMode = .scaleAspectFit
@@ -42,7 +42,7 @@ class CryptoTableViewCell: UITableViewCell {
         // Configure newTagLabel (for "New" tag)
         newTagLabel.isHidden = true // Initially hidden
         newTagLabel.text = "NEW"
-        newTagLabel.textColor = .white
+        newTagLabel.textColor = .label
         newTagLabel.font = UIFont.systemFont(ofSize: LayoutConstants.samllFontSize, weight: .bold)
         newTagLabel.backgroundColor = .systemGreen
         newTagLabel.translatesAutoresizingMaskIntoConstraints = false // Disable autoresizing mask translation to constraints

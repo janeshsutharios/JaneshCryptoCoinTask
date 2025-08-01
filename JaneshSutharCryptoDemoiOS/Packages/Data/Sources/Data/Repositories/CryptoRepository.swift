@@ -9,10 +9,10 @@ import Foundation
 import Domain
 public class CryptoRepository: CryptoRepositoryProtocol {
     
-    private let networkDataSource: CryptoNetworkDataSource
-    private let localDataSource: CryptoLocalDataSource
+    private let networkDataSource: any CryptoNetworkDataSource
+    private let localDataSource: any CryptoLocalDataSource
 
-    public init(networkDataSource: CryptoNetworkDataSource, localDataSource: CryptoLocalDataSource) {
+    public init(networkDataSource: any CryptoNetworkDataSource, localDataSource: any CryptoLocalDataSource) {
         self.networkDataSource = networkDataSource
         self.localDataSource = localDataSource
     }

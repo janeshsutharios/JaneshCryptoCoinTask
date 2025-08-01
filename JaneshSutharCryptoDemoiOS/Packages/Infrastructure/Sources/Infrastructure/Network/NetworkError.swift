@@ -13,7 +13,7 @@ public enum NetworkError: Error, LocalizedError {
     case noData
     case timeout
     case noInternet // New case for internet connectivity issues
-    case unknown(Error) // Catch-all for unexpected errors
+    case unknown(any Error) // Catch-all for unexpected errors
 
     public var errorDescription: String? {
         switch self {
