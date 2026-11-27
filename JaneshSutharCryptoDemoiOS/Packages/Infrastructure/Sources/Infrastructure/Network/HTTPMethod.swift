@@ -6,7 +6,7 @@
 
 import Foundation
 
-public enum HTTPMethod: String {
+public enum HTTPMethod: String, Sendable {
     case GET
     case POST
     case PUT

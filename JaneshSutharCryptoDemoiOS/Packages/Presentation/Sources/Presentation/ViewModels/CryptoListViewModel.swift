@@ -1,5 +1,5 @@
 //
-//  CoinListViewModel.swift
+//  CryptoListViewModel.swift
 //  CryptoCoin
 //
 //  Created by Janesh Suthar.
@@ -11,87 +11,111 @@ import Domain
 
 @MainActor
 public final class CryptoListViewModel {
-    
+
+    // MARK: - Public state & callbacks
     public var allCoins: [CryptoCoinEntity] = []
-    public var filteredCoins: [CryptoCoinEntity] = []
     public var reloadTableView: (() -> Void)?
-    var showLoader: (() -> Void)?
-    var hideLoader: (() -> Void)?
+    public var showLoader: (() -> Void)?
+    public var hideLoader: (() -> Void)?
     public var manageError: ((_ titleString: String, _ message: String) -> Void)?
-    
-    var isFilteredCoinsEmpty: Bool {
-        return filteredCoins.isEmpty
+
+    // MARK: - Private filter & search state
+    private var searchQuery: String = ""
+    private var activeFilter: Bool?
+    private var inactiveFilter: Bool?
+    private var onlyCoinsFilter: String?
+    private var onlyTokensFilter: String?
+    private var isNewFilter: Bool?
+
+    // MARK: - Derived state
+    public var filteredCoins: [CryptoCoinEntity] {
+        let trimmedQuery = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+
+        return allCoins.filter { coin in
+            // Status dimension: selecting both Active & Inactive includes both
+            let matchesStatus: Bool
+            switch (activeFilter, inactiveFilter) {
+            case let (.some(active), .none):
+                matchesStatus = coin.isActive == active
+            case let (.none, .some(inactive)):
+                matchesStatus = coin.isActive == !inactive
+            case let (.some(active), .some(inactive)):
+                matchesStatus = coin.isActive == active || coin.isActive == !inactive
+            case (.none, .none):
+                matchesStatus = true
+            }
+
+            // Type dimension: selecting both Only Coins & Only Tokens includes both
+            let matchesType: Bool
+            switch (onlyCoinsFilter, onlyTokensFilter) {
+            case let (.some(coinType), .none):
+                matchesType = coin.type == coinType
+            case let (.none, .some(tokenType)):
+                matchesType = coin.type == tokenType
+            case let (.some(coinType), .some(tokenType)):
+                matchesType = coin.type == coinType || coin.type == tokenType
+            case (.none, .none):
+                matchesType = true
+            }
+
+            // Newness dimension
+            let matchesNew = isNewFilter.map { coin.isNew == $0 } ?? true
+
+            // Search dimension
+            let matchesSearch = trimmedQuery.isEmpty ||
+                coin.name.lowercased().contains(trimmedQuery) ||
+                coin.symbol.lowercased().contains(trimmedQuery)
+
+            return matchesStatus && matchesType && matchesNew && matchesSearch
+        }
     }
-    
-    private let getCryptoCoinsUseCase: FetchCryptoCoinsUseCase
-    
-    public init(getCryptoCoinsUseCase: FetchCryptoCoinsUseCase) async {
+
+    public var isFilteredCoinsEmpty: Bool {
+        filteredCoins.isEmpty
+    }
+
+    // MARK: - Dependencies
+    private let getCryptoCoinsUseCase: any FetchCryptoCoinsUseCaseProtocol
+
+    // MARK: - Init (synchronous, side-effect free)
+    public init(getCryptoCoinsUseCase: any FetchCryptoCoinsUseCaseProtocol) {
         self.getCryptoCoinsUseCase = getCryptoCoinsUseCase
-        await fetchCoins()
     }
-   
+
+    // MARK: - Fetch
     public func fetchCoins() async {
         showLoader?()
+        defer {
+            reloadTableView?()
+            hideLoader?()
+        }
         do {
-            // Decide whether to fetch from network or local storage based on connectivity
-            let coins = try await fetchCoinsBasedOnNetworkStatus()
-            // Update UI with the fetched coins
+            let coins = try await getCryptoCoinsUseCase.execute()
             self.allCoins = coins
-            self.filteredCoins = coins
         } catch {
-            // Handle any error that occurs during fetching
             self.manageError?("Error", error.localizedDescription)
         }
-        self.reloadTableView?()
-        // Hide the loader after the operation is complete (whether it succeeded or failed)
-        self.hideLoader?()
     }
-    
-    private nonisolated func fetchCoinsBasedOnNetworkStatus() async throws -> [CryptoCoinEntity] {
-        if Reachability.isConnectedToNetwork() {
-            // Fetch from the network if connected
-            return try await getCryptoCoinsUseCase.execute(fromNetwork: true)
-        } else {
-            // Fetch from local storage if no internet connection
-            return try await getCryptoCoinsUseCase.execute(fromNetwork: false)
-        }
-    }
-    
-    public func filterCoins(isActive: Bool?, isInactive: Bool?, onlyCoins: String?, isNew: Bool?, onlyTokens: String?) {
-        filteredCoins = allCoins.filter { coin in
-            var matches = true
-            if let isActive = isActive {
-                matches = matches && coin.isActive == isActive
-            }
-            if let isInactive = isInactive {
-                matches = matches && coin.isActive == !isInactive
-            }
-            if let onlyCoins = onlyCoins {
-                matches = matches && coin.type == onlyCoins
-            }
-            if let onlyTokens = onlyTokens {
-                matches = matches && coin.type == onlyTokens
-            }
-            if let isNew = isNew {
-                matches = matches && coin.isNew == isNew
-            }
-            return matches
-        }
+
+    // MARK: - Filter
+    public func filterCoins(
+        isActive: Bool?,
+        isInactive: Bool?,
+        onlyCoins: String?,
+        isNew: Bool?,
+        onlyTokens: String?
+    ) {
+        activeFilter = isActive
+        inactiveFilter = isInactive
+        onlyCoinsFilter = onlyCoins
+        onlyTokensFilter = onlyTokens
+        isNewFilter = isNew
         reloadTableView?()
     }
-    
+
+    // MARK: - Search
     public func searchCoins(query: String) {
-        if query.isEmpty {
-            // If the search text is empty, show the original data (allCoins)
-            filteredCoins = allCoins
-        } else {
-            // Filter the coins based on the search query
-            filteredCoins = allCoins.filter {
-                $0.name.lowercased().contains(query.lowercased()) ||
-                $0.symbol.lowercased().contains(query.lowercased())
-            }
-        }
-        reloadTableView?()  // Trigger table reload
+        searchQuery = query
+        reloadTableView?()
     }
 }
-

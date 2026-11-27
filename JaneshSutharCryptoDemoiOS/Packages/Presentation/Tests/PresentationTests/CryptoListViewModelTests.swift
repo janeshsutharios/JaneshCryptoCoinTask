@@ -7,118 +7,151 @@
 
 import XCTest
 import Domain
-import Data
-import Infrastructure
 @testable import Presentation
 
-class CryptoListViewModelTests: XCTestCase {
-    
-    var viewModel: CryptoListViewModel!
-    var mockUseCase: MockGetCryptoCoinsUseCase!
-    var mockRepository: MockCryptoRepository!
-    
-    override func setUp() {
-        super.setUp()
-        
-        // Initialize the mock repository and mock use case
-        mockRepository = MockCryptoRepository()
-        mockUseCase = MockGetCryptoCoinsUseCase(repository: mockRepository)
+@MainActor
+final class CryptoListViewModelTests: XCTestCase {
+
+    private var viewModel: CryptoListViewModel!
+    private var mockUseCase: MockGetCryptoCoinsUseCase!
+
+    private let sampleCoins: [CryptoCoinEntity] = [
+        CryptoCoinEntity(name: "Bitcoin", symbol: "BTC", type: "coin", isActive: true, isNew: false, id: "btc"),
+        CryptoCoinEntity(name: "Ethereum", symbol: "ETH", type: "coin", isActive: false, isNew: false, id: "eth"),
+        CryptoCoinEntity(name: "Tether", symbol: "USDT", type: "token", isActive: true, isNew: true, id: "usdt"),
+        CryptoCoinEntity(name: "Beta Token", symbol: "BETA", type: "token", isActive: false, isNew: true, id: "beta")
+    ]
+
+    override func setUp() async throws {
+        try await super.setUp()
+        mockUseCase = MockGetCryptoCoinsUseCase()
         viewModel = CryptoListViewModel(getCryptoCoinsUseCase: mockUseCase)
     }
-    
-    override func tearDown() {
+
+    override func tearDown() async throws {
         viewModel = nil
         mockUseCase = nil
-        mockRepository = nil
-        super.tearDown()
+        try await super.tearDown()
     }
-    
-    // MARK: - Network Tests
-    func testFetchCoinsSuccess() async {
-        // Given
-        mockUseCase.mockedCoins = [
-            CryptoCoinEntity(name: "Bitcoin", symbol: "BTC", type: "coin", isActive: true, isNew: true, id: UUID().uuidString)
-        ]
-        
-        // Expect that the reloadTableView will be called after fetchCoins
-        let expectation = self.expectation(description: "reloadTableView should be called")
-        
-        // Use a flag to ensure expectation is only fulfilled once
-        var expectationFulfilled = false
-        // When
-        // Set up the reloadTableView to fulfill the expectation
-        viewModel.reloadTableView = {
-            if !expectationFulfilled {
-                expectation.fulfill()  // Fulfill the expectation only once
-                expectationFulfilled = true
-            }
-        }
-        
-        viewModel.fetchCoins()
-        
-        // Wait for the expectation to be fulfilled within the timeout
-        await fulfillment(of: [expectation], timeout: 1.0)
-                
-        // Assert the expected outcomes
-        XCTAssertEqual(viewModel.allCoins.count, 1)
-        XCTAssertEqual(viewModel.filteredCoins.count, 1)
-    }
-    
-    func testFetchCoinsFailure() async {
-        // Given
-        mockUseCase.errorToThrow = NSError(domain: "Test", code: 1, userInfo: nil)
-        
-        // Expect that the manageError callback will be called when there's a failure
-        let expectation = self.expectation(description: "manageError should be called")
-        
-        // Use a flag to ensure expectation is only fulfilled once
-        var expectationFulfilled = false
-        // When
-        // Set up the handleError callback to fulfill the expectation
-        viewModel.manageError = { _, _ in
-            if !expectationFulfilled {
-                expectation.fulfill()  // Fulfill the expectation only once
-                expectationFulfilled = true
-            }
-        }
-        
-        viewModel.fetchCoins()
-        
-        // Wait for the expectation to be fulfilled within the timeout
-        await fulfillment(of: [expectation], timeout: 1.0)
-        
-        // Assert the expected outcomes
-        XCTAssertEqual(viewModel.allCoins.count, 0, "Coins should be empty on failure")
-        XCTAssertEqual(viewModel.filteredCoins.count, 0, "Filtered coins should be empty on failure")
-    }
-    
-    // MARK: - Filter Tests
-    func testFilterCoins() {
-        // Given
-        let coin1 = CryptoCoinEntity(name: "Bitcoin", symbol: "BTC", type: "coin", isActive: true, isNew: true, id: UUID().uuidString)
-        let coin2 = CryptoCoinEntity(name: "Ethereum", symbol: "ETH", type: "coin", isActive: false, isNew: false, id: UUID().uuidString)
-        viewModel.allCoins = [coin1, coin2]
-        
-        XCTAssertTrue(viewModel.filteredCoins.isEmpty, "filteredCoins should initially be empty")
 
-        viewModel.filterCoins(isActive: true, isInactive: nil, onlyCoins: nil, isNew: nil, onlyTokens: nil)
-        
-        XCTAssertEqual(viewModel.filteredCoins.count, 1)
+    // MARK: - Init & Fetch Tests
+    func testInit_doesNotTriggerFetch() {
+        XCTAssertEqual(mockUseCase.executeCallCount, 0)
+        XCTAssertTrue(viewModel.allCoins.isEmpty)
+        XCTAssertTrue(viewModel.filteredCoins.isEmpty)
     }
-    
+
+    func testFetchCoinsSuccess_populatesCoinsAndCallsCallbacksInOrder() async {
+        mockUseCase.mockedCoins = sampleCoins
+        var events: [String] = []
+        viewModel.showLoader = { events.append("showLoader") }
+        viewModel.reloadTableView = { events.append("reload") }
+        viewModel.hideLoader = { events.append("hideLoader") }
+
+        await viewModel.fetchCoins()
+
+        XCTAssertEqual(mockUseCase.executeCallCount, 1)
+        XCTAssertEqual(viewModel.allCoins.count, 4)
+        XCTAssertEqual(viewModel.filteredCoins.count, 4)
+        XCTAssertEqual(events, ["showLoader", "reload", "hideLoader"])
+    }
+
+    func testFetchCoinsFailure_triggersManageErrorAndStillHidesLoader() async {
+        mockUseCase.errorToThrow = NSError(domain: "Test", code: 1, userInfo: [NSLocalizedDescriptionKey: "Offline"])
+        var events: [String] = []
+        var capturedMessage: String?
+        viewModel.showLoader = { events.append("showLoader") }
+        viewModel.manageError = { _, message in
+            events.append("error")
+            capturedMessage = message
+        }
+        viewModel.reloadTableView = { events.append("reload") }
+        viewModel.hideLoader = { events.append("hideLoader") }
+
+        await viewModel.fetchCoins()
+
+        XCTAssertEqual(capturedMessage, "Offline")
+        XCTAssertTrue(viewModel.allCoins.isEmpty)
+        XCTAssertEqual(events, ["showLoader", "error", "reload", "hideLoader"])
+    }
+
+    // MARK: - Filter Tests
+    func testFilterActiveCoins() {
+        viewModel.allCoins = sampleCoins
+        viewModel.filterCoins(isActive: true, isInactive: nil, onlyCoins: nil, isNew: nil, onlyTokens: nil)
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["BTC", "USDT"])
+    }
+
+    func testFilterInactiveCoins() {
+        viewModel.allCoins = sampleCoins
+        viewModel.filterCoins(isActive: nil, isInactive: true, onlyCoins: nil, isNew: nil, onlyTokens: nil)
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["ETH", "BETA"])
+    }
+
+    func testFilterOnlyCoinsAndOnlyTokensSeparately() {
+        viewModel.allCoins = sampleCoins
+
+        viewModel.filterCoins(isActive: nil, isInactive: nil, onlyCoins: "coin", isNew: nil, onlyTokens: nil)
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["BTC", "ETH"])
+
+        viewModel.filterCoins(isActive: nil, isInactive: nil, onlyCoins: nil, isNew: nil, onlyTokens: "token")
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["USDT", "BETA"])
+    }
+
+    func testFilterNewCoins() {
+        viewModel.allCoins = sampleCoins
+        viewModel.filterCoins(isActive: nil, isInactive: nil, onlyCoins: nil, isNew: true, onlyTokens: nil)
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["USDT", "BETA"])
+    }
+
+    func testFilterOppositePairs_includesAllInDimension() {
+        viewModel.allCoins = sampleCoins
+
+        // Both Active + Inactive selected -> all statuses included
+        viewModel.filterCoins(isActive: true, isInactive: true, onlyCoins: nil, isNew: nil, onlyTokens: nil)
+        XCTAssertEqual(viewModel.filteredCoins.count, 4)
+
+        // Both Only Coins + Only Tokens selected -> all types included
+        viewModel.filterCoins(isActive: nil, isInactive: nil, onlyCoins: "coin", isNew: nil, onlyTokens: "token")
+        XCTAssertEqual(viewModel.filteredCoins.count, 4)
+    }
+
     // MARK: - Search Tests
-    func testSearchCoins() async {
-        // Given
-        let coin1 = CryptoCoinEntity(name: "Bitcoin", symbol: "BTC", type: "coin", isActive: true, isNew: true, id: nil)
-        let coin2 = CryptoCoinEntity(name: "Ethereum", symbol: "ETH", type: "coin", isActive: false, isNew: false, id: nil)
-        viewModel.allCoins = [coin1, coin2]
-        
-        // Make sure filteredCoins is empty before searching
-        XCTAssertTrue(viewModel.filteredCoins.isEmpty, "filteredCoins should initially be empty")
-        
-        viewModel.searchCoins(query: "Ethereum") // Await the async function
-        
-        // Make sure filtering is done
-        XCTAssertEqual(viewModel.filteredCoins.count, 1)
+    func testSearchByNameAndSymbolCaseInsensitive() {
+        viewModel.allCoins = sampleCoins
+
+        viewModel.searchCoins(query: "ethereum")
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["ETH"])
+
+        viewModel.searchCoins(query: "usdt")
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["USDT"])
+
+        viewModel.searchCoins(query: "")
+        XCTAssertEqual(viewModel.filteredCoins.count, 4)
+    }
+
+    func testSearchNoMatch_setsIsFilteredCoinsEmpty() {
+        viewModel.allCoins = sampleCoins
+        viewModel.searchCoins(query: "DOGE")
+        XCTAssertTrue(viewModel.isFilteredCoinsEmpty)
+    }
+
+    // MARK: - Combined Search + Filter Tests
+    func testSearchAndFilter_combinedWithoutOverwritingEachOther() {
+        viewModel.allCoins = sampleCoins
+
+        // Filter active first, then search "t" (matches Bitcoin & Tether; Tether is active, Beta is inactive)
+        viewModel.filterCoins(isActive: true, isInactive: nil, onlyCoins: nil, isNew: nil, onlyTokens: nil)
+        viewModel.searchCoins(query: "t")
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["BTC", "USDT"])
+
+        // Clear search -> active filter remains intact
+        viewModel.searchCoins(query: "")
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["BTC", "USDT"])
+
+        // Apply search first, then narrow with filter -> search remains intact
+        viewModel.searchCoins(query: "t")
+        viewModel.filterCoins(isActive: nil, isInactive: nil, onlyCoins: nil, isNew: true, onlyTokens: "token")
+        XCTAssertEqual(viewModel.filteredCoins.map(\.symbol), ["USDT", "BETA"])
     }
 }

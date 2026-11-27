@@ -11,9 +11,9 @@ import Common
 import Infrastructure
 
 public actor CryptoNetworkDataSourceImpl: CryptoNetworkDataSource {
-    private let apiService: NetworkServiceManager
+    private let apiService: any APIServiceProtocol
 
-    public init(apiService: NetworkServiceManager) {
+    public init(apiService: any APIServiceProtocol) {
         self.apiService = apiService
     }
 

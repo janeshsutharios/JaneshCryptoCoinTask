@@ -1,91 +1,167 @@
-// XCTest Documentation
-// https://developer.apple.com/documentation/xctest
-
-// Defining Test Cases and Test Methods
-// https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
-
 import XCTest
 import CoreData
-@testable import Data // Replace with your module name
+import Domain
+import Infrastructure
+@testable import Data
 
-final class CoreDataHelperTests: XCTestCase {
-    
-    var coreDataHelper: CoreDataHelper!
-    var persistentContainer: NSPersistentContainer!
-    
-    override func setUp() {
-        super.setUp()
-        
-        // Create an in-memory NSPersistentContainer for testing
-        let modelURL = Bundle.module.url(forResource: "CryptoCoin", withExtension: "momd")!
-        let model = NSManagedObjectModel(contentsOf: modelURL)!
-        persistentContainer = NSPersistentContainer(name: "CryptoCoin", managedObjectModel: model)
-        
-        let description = NSPersistentStoreDescription()
-        description.type = NSInMemoryStoreType // In-memory store for testing
-        persistentContainer.persistentStoreDescriptions = [description]
-        
-        persistentContainer.loadPersistentStores { description, error in
-            XCTAssertNil(error, "Failed to load in-memory store: \(error?.localizedDescription ?? "")")
-        }
-        
-        coreDataHelper = CoreDataHelper() // Initialize CoreDataHelper
+// MARK: - Mocks
+final class MockNetworkDataSource: CryptoNetworkDataSource, @unchecked Sendable {
+    var coinsToReturn: [CryptoCoinEntity] = []
+    var errorToThrow: (any Error)?
+    var fetchCallCount = 0
+
+    func fetchCryptoCoins() async throws -> [CryptoCoinEntity] {
+        fetchCallCount += 1
+        if let errorToThrow { throw errorToThrow }
+        return coinsToReturn
     }
-    
+}
+
+final class MockLocalDataSource: CryptoLocalDataSource, @unchecked Sendable {
+    var storedCoins: [CryptoCoinEntity] = []
+    var fetchError: (any Error)?
+    var saveError: (any Error)?
+    var saveCallCount = 0
+
+    func fetchCryptoCoins() async throws -> [CryptoCoinEntity] {
+        if let fetchError { throw fetchError }
+        return storedCoins
+    }
+
+    func saveCryptoCoins(_ coins: [CryptoCoinEntity]) async throws {
+        saveCallCount += 1
+        if let saveError { throw saveError }
+        storedCoins = coins
+    }
+}
+
+final class MockAPIService: APIServiceProtocol, @unchecked Sendable {
+    var coins: [CryptoCoinEntity] = []
+    var errorToThrow: (any Error)?
+
+    func fetchCryptoCoins() async throws -> [CryptoCoinEntity] {
+        if let errorToThrow { throw errorToThrow }
+        return coins
+    }
+}
+
+// MARK: - Tests
+final class DataTests: XCTestCase {
+
+    private var coreDataHelper: CoreDataHelper!
+    private var localDataSource: CryptoLocalDataSourceImpl!
+
+    override func setUp() async throws {
+        try await super.setUp()
+        coreDataHelper = try CoreDataHelper(inMemory: true)
+        localDataSource = CryptoLocalDataSourceImpl(coreDataHelper: coreDataHelper)
+    }
+
     override func tearDown() {
-        persistentContainer = nil
+        localDataSource = nil
         coreDataHelper = nil
         super.tearDown()
     }
-    
-    func testSaveContextSuccessfully() throws {
-        let context = persistentContainer.viewContext
-        
-        // Create a mock object in the context if there is no data
-        let fetchRequest: NSFetchRequest<CryptoCoinCoreData> = CryptoCoinCoreData.fetchRequest()
-        let existingCoins = try context.fetch(fetchRequest)
-        
-        if existingCoins.isEmpty {
-            // If no data, add a new object
-            let cryptoCoin = CryptoCoinCoreData(context: context)
-            cryptoCoin.id = UUID().uuidString
-            cryptoCoin.name = "Bitcoin"
-            cryptoCoin.symbol = "BTC"
-            cryptoCoin.isActive = true
-            cryptoCoin.isNew = false
-            cryptoCoin.type = "Cryptocurrency"
-            
-            XCTAssertTrue(context.hasChanges)
-            
-            // Save the context
-            XCTAssertNoThrow(try coreDataHelper.save(context: context), "Context save should not throw an error")
-        }
-        
-        // Fetch data again to check if the object is saved or not
-        let results = try context.fetch(fetchRequest)
-        
-        // Assert that there's at least one item in the database
-        XCTAssertGreaterThanOrEqual(results.count, 1, "There should be at least one coin in Core Data")
-        
-        // Optionally, validate the fetched data
-        if let firstCoin = results.first {
-            XCTAssertEqual(firstCoin.name, "Bitcoin")
+
+    // MARK: - Local Data Source Tests
+    func testSaveAndFetch_preservesCoinPropertiesAndID() async throws {
+        let coin = CryptoCoinEntity(name: "Bitcoin", symbol: "BTC", type: "coin", isActive: true, isNew: false, id: "btc-bitcoin")
+        try await localDataSource.saveCryptoCoins([coin])
+
+        let fetched = try await localDataSource.fetchCryptoCoins()
+        XCTAssertEqual(fetched.count, 1)
+        XCTAssertEqual(fetched.first?.id, "btc-bitcoin")
+        XCTAssertEqual(fetched.first?.name, "Bitcoin")
+        XCTAssertEqual(fetched.first?.symbol, "BTC")
+        XCTAssertEqual(fetched.first?.type, "coin")
+        XCTAssertEqual(fetched.first?.isActive, true)
+        XCTAssertEqual(fetched.first?.isNew, false)
+    }
+
+    func testSaveRepeatedly_replacesOldEntriesAndUpdatesMainContext() async throws {
+        let initial = [
+            CryptoCoinEntity(name: "Bitcoin", symbol: "BTC", type: "coin", isActive: true, isNew: false, id: "btc"),
+            CryptoCoinEntity(name: "Ethereum", symbol: "ETH", type: "coin", isActive: true, isNew: false, id: "eth")
+        ]
+        try await localDataSource.saveCryptoCoins(initial)
+        let firstFetch = try await localDataSource.fetchCryptoCoins()
+        XCTAssertEqual(firstFetch.count, 2)
+
+        let replacement = [
+            CryptoCoinEntity(name: "Solana", symbol: "SOL", type: "coin", isActive: true, isNew: true, id: "sol")
+        ]
+        try await localDataSource.saveCryptoCoins(replacement)
+        let secondFetch = try await localDataSource.fetchCryptoCoins()
+
+        XCTAssertEqual(secondFetch.count, 1)
+        XCTAssertEqual(secondFetch.first?.id, "sol")
+        XCTAssertEqual(secondFetch.first?.symbol, "SOL")
+    }
+
+    func testSaveEmptyArray_clearsCache() async throws {
+        let coin = CryptoCoinEntity(name: "Bitcoin", symbol: "BTC", type: "coin", isActive: true, isNew: false, id: "btc")
+        try await localDataSource.saveCryptoCoins([coin])
+        try await localDataSource.saveCryptoCoins([])
+
+        let fetched = try await localDataSource.fetchCryptoCoins()
+        XCTAssertTrue(fetched.isEmpty)
+    }
+
+    // MARK: - Repository Tests
+    func testRepositoryFetch_networkSuccessCachesOnce() async throws {
+        let networkDS = MockNetworkDataSource()
+        let localDS = MockLocalDataSource()
+        let expected = [CryptoCoinEntity(name: "Bitcoin", symbol: "BTC", type: "coin", isActive: true, isNew: true, id: "btc")]
+        networkDS.coinsToReturn = expected
+
+        let repository = CryptoRepository(networkDataSource: networkDS, localDataSource: localDS)
+        let result = try await repository.fetchCryptoCoins()
+
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(localDS.saveCallCount, 1)
+        XCTAssertEqual(localDS.storedCoins.first?.id, "btc")
+    }
+
+    func testRepositoryFetch_networkFailureFallsBackToCache() async throws {
+        let networkDS = MockNetworkDataSource()
+        let localDS = MockLocalDataSource()
+        networkDS.errorToThrow = NetworkError.noInternet
+        localDS.storedCoins = [CryptoCoinEntity(name: "Ethereum", symbol: "ETH", type: "coin", isActive: true, isNew: false, id: "eth")]
+
+        let repository = CryptoRepository(networkDataSource: networkDS, localDataSource: localDS)
+        let result = try await repository.fetchCryptoCoins()
+
+        XCTAssertEqual(result.count, 1)
+        XCTAssertEqual(result.first?.symbol, "ETH")
+        XCTAssertEqual(localDS.saveCallCount, 0)
+    }
+
+    func testRepositoryFetch_networkFailureWithEmptyCacheThrowsNetworkError() async {
+        let networkDS = MockNetworkDataSource()
+        let localDS = MockLocalDataSource()
+        networkDS.errorToThrow = NetworkError.noInternet
+        localDS.storedCoins = []
+
+        let repository = CryptoRepository(networkDataSource: networkDS, localDataSource: localDS)
+
+        do {
+            _ = try await repository.fetchCryptoCoins()
+            XCTFail("Expected NetworkError.noInternet")
+        } catch NetworkError.noInternet {
+            // Expected
+        } catch {
+            XCTFail("Unexpected error: \(error)")
         }
     }
-    
-    func testSaveContextThrowsError() throws {
-        let context = persistentContainer.viewContext
-        
-        // Add an invalid object (e.g., missing a required field)
-        let cryptoCoin = CryptoCoinCoreData(context: context)
-        cryptoCoin.id = nil // Required field is nil
-        
-        // Ensure the context has changes before saving
-        XCTAssertTrue(context.hasChanges)
-        
-        // Attempt to save and expect an error
-        XCTAssertThrowsError(try coreDataHelper.save(context: context), "Context save should throw an error due to missing required fields") { error in
-            XCTAssertNotNil(error, "Error should not be nil")
-        }
+
+    // MARK: - Network Data Source Tests
+    func testNetworkDataSource_usesAPIServiceProtocol() async throws {
+        let apiService = MockAPIService()
+        apiService.coins = [CryptoCoinEntity(name: "Cardano", symbol: "ADA", type: "coin", isActive: true, isNew: false, id: "ada")]
+        let dataSource = CryptoNetworkDataSourceImpl(apiService: apiService)
+
+        let coins = try await dataSource.fetchCryptoCoins()
+        XCTAssertEqual(coins.count, 1)
+        XCTAssertEqual(coins.first?.symbol, "ADA")
     }
 }

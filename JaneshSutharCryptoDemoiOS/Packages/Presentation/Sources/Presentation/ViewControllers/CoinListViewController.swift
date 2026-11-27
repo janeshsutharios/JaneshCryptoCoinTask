@@ -1,44 +1,41 @@
 import UIKit
 import Domain
 import Common
-import Data
-import Infrastructure
 
 @MainActor
-class CryptoListViewController: UIViewController {
-    var viewModel: CryptoListViewModel!
+public final class CryptoListViewController: UIViewController {
+    public let viewModel: CryptoListViewModel
     let tableView = UITableView()
     private let searchBar = UISearchBar()
     private var selectedFilterOptions: Set<FilterOption> = []
     private var filterView: FilterView?
+    private var filterViewTopConstraint: NSLayoutConstraint?
     private var noDataView: NoDataView?
-    
-    override func viewDidLoad() {
+
+    public init(viewModel: CryptoListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented; use init(viewModel:) instead.")
+    }
+
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        Task {
-            await initializeViewModel()
-        }
-
-    }
-    
-    //MARK: - Private Methods
-    private func initializeViewModel() async {
-        let networkManager = NetworkManager()
-        let apiService = NetworkServiceManager(networkManager: networkManager)
-        let networkDataSource = CryptoNetworkDataSourceImpl(apiService: apiService)
-        let coreDataHelper = CoreDataHelper()
-        let localDataSource = CryptoLocalDataSourceImpl(coreDataHelper: coreDataHelper)
-        let repository = CryptoRepository(networkDataSource: networkDataSource, localDataSource: localDataSource)
-        let useCase = FetchCryptoCoinsUseCase(repository: repository)
-        viewModel = await CryptoListViewModel(getCryptoCoinsUseCase: useCase)
         setupUI()
-        await viewModel.fetchCoins()
-        self.setupBindings()
-
+        setupBindings()
+        Task { [weak self] in
+            await self?.viewModel.fetchCoins()
+        }
     }
-    
+
+    // MARK: - Private Methods
     private func setupUI() {
+        view.backgroundColor = .systemBackground
+
         searchBar.delegate = self
         searchBar.placeholder = Localization.localizedString(
             for: "search_crypto_coins",
@@ -56,7 +53,7 @@ class CryptoListViewController: UIViewController {
         tableView.register(CryptoTableViewCell.self, forCellReuseIdentifier: "CryptoTableViewCell")
         setupConstraints()
     }
-    
+
     private func setupConstraints() {
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -77,39 +74,32 @@ class CryptoListViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
+
     private func setupBindings() {
         viewModel.reloadTableView = { [weak self] in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-                self?.updateNoDataView()
-            }
+            self?.tableView.reloadData()
+            self?.updateNoDataView()
         }
-        
-        viewModel.showLoader = {
-            DispatchQueue.main.async {
-                LoaderView.showLoader(in: self.view)
-            }
+
+        viewModel.showLoader = { [weak self] in
+            guard let self else { return }
+            LoaderView.showLoader(in: self.view)
         }
-        
+
         viewModel.hideLoader = {
-            DispatchQueue.main.async {
-                LoaderView.hideLoader()
-            }
+            LoaderView.hideLoader()
         }
-        
-        viewModel.manageError = { title, message in
-            DispatchQueue.main.async {
-                self.showAlert(message: message, title: title)
-            }
+
+        viewModel.manageError = { [weak self] title, message in
+            self?.showAlert(message: message, title: title)
         }
     }
-    
+
     private func setupNavigationBar() {
-        title = Localization.localizedString(for: "coin",defaultValue: "Coin")
+        title = Localization.localizedString(for: "coin", defaultValue: "Coin")
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.tintColor = .systemBlue
-        
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "flask"),
             style: .plain,
@@ -117,40 +107,60 @@ class CryptoListViewController: UIViewController {
             action: #selector(showFilterOptions)
         )
     }
-    
-    //MARK: - Filter View Methods
+
+    // MARK: - Filter View Methods
     @objc private func hideFilterOptions() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.filterView?.frame.origin.y = self.view.frame.height
-        }) { _ in
-            self.filterView?.removeFromSuperview()
-            self.filterView = nil
+        guard let filterView else { return }
+        filterViewTopConstraint?.isActive = false
+        let offscreenConstraint = filterView.topAnchor.constraint(equalTo: view.bottomAnchor)
+        offscreenConstraint.isActive = true
+        filterViewTopConstraint = offscreenConstraint
+
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            self?.view.layoutIfNeeded()
+        }) { [weak self] _ in
+            self?.filterView?.removeFromSuperview()
+            self?.filterView = nil
+            self?.filterViewTopConstraint = nil
         }
     }
-    
+
     @objc private func showFilterOptions() {
         guard filterView == nil else { return }
-        let filterViewHeight = 200.0
-        let filterFrame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: filterViewHeight)
-        filterView = FilterView(frame: filterFrame)
-        filterView?.onApplyFilters = { [weak self] selectedOptions in
+
+        let newFilterView = FilterView(frame: .zero)
+        newFilterView.translatesAutoresizingMaskIntoConstraints = false
+        newFilterView.onApplyFilters = { [weak self] selectedOptions in
             self?.applySelectedFilters(selectedOptions)
             self?.hideFilterOptions()
         }
-        
-        filterView?.onCancelFilters = { [weak self] in
+        newFilterView.onCancelFilters = { [weak self] in
             self?.hideFilterOptions()
         }
-                
-        filterView?.selectedFilters = selectedFilterOptions
-        filterView?.updateButtonStates()
-        
-        view.addSubview(filterView!)
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5) {
-            self.filterView?.frame.origin.y = self.view.frame.height - filterViewHeight
+        newFilterView.selectedFilters = selectedFilterOptions
+        newFilterView.updateButtonStates()
+
+        view.addSubview(newFilterView)
+        let offscreenTop = newFilterView.topAnchor.constraint(equalTo: view.bottomAnchor)
+        NSLayoutConstraint.activate([
+            newFilterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            newFilterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            offscreenTop
+        ])
+        view.layoutIfNeeded()
+
+        offscreenTop.isActive = false
+        let visibleBottom = newFilterView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        visibleBottom.isActive = true
+
+        self.filterView = newFilterView
+        self.filterViewTopConstraint = visibleBottom
+
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5) { [weak self] in
+            self?.view.layoutIfNeeded()
         }
     }
-    
+
     private func applySelectedFilters(_ selectedOptions: Set<FilterOption>) {
         selectedFilterOptions = selectedOptions
         let isActive = selectedOptions.contains(.activeCoins) ? true : nil
@@ -158,42 +168,48 @@ class CryptoListViewController: UIViewController {
         let isNew = selectedOptions.contains(.newCoins) ? true : nil
         let onlyCoins = selectedOptions.contains(.onlyCoins) ? "coin" : nil
         let onlyTokens = selectedOptions.contains(.onlyTokens) ? "token" : nil
-        viewModel.filterCoins(isActive: isActive, isInactive: isInactive, onlyCoins: onlyCoins, isNew: isNew, onlyTokens: onlyTokens)
+        viewModel.filterCoins(
+            isActive: isActive,
+            isInactive: isInactive,
+            onlyCoins: onlyCoins,
+            isNew: isNew,
+            onlyTokens: onlyTokens
+        )
     }
-    
-    //MARK: - NoData View Methods
+
+    // MARK: - NoData View Methods
     private func showNoDataView() {
         if noDataView == nil {
             let newNoDataView = NoDataView(frame: .zero)
             newNoDataView.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(newNoDataView)
             noDataView = newNoDataView
-            
+
             NSLayoutConstraint.activate([
                 newNoDataView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 newNoDataView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
                 newNoDataView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.defaultMargin),
                 newNoDataView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.defaultMargin)
             ])
-            
+
             newNoDataView.alpha = 0
             UIView.animate(withDuration: 0.2) {
                 newNoDataView.alpha = 1
             }
         }
     }
-    
+
     private func hideNoDataView() {
         guard let noDataView = noDataView else { return }
-        
+
         UIView.animate(withDuration: 0.2, animations: {
             noDataView.alpha = 0
-        }) { _ in
+        }) { [weak self] _ in
             noDataView.removeFromSuperview()
-            self.noDataView = nil
+            self?.noDataView = nil
         }
     }
-    
+
     private func updateNoDataView() {
         if viewModel.isFilteredCoinsEmpty {
             showNoDataView()

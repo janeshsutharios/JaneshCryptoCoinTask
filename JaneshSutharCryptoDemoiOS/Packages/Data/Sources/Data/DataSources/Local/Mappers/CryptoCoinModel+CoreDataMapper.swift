@@ -1,5 +1,5 @@
 //
-//  CryptoCoinModel.swift
+//  CryptoCoinModel+CoreDataMapper.swift
 //  CryptoCoin
 //
 //  Created by Janesh Suthar
@@ -7,13 +7,12 @@
 
 import Foundation
 import Domain
-import Foundation
 import CoreData
 
 extension CryptoCoinEntity {
     func toCoreData(context: NSManagedObjectContext) -> CryptoCoinCoreData {
         let coreDataModel = CryptoCoinCoreData(context: context)
-        coreDataModel.id = UUID().uuidString
+        coreDataModel.id = self.id ?? UUID().uuidString
         coreDataModel.name = self.name
         coreDataModel.symbol = self.symbol
         coreDataModel.isActive = self.isActive
