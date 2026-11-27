@@ -29,6 +29,14 @@ extension CryptoListViewController: UITableViewDelegate, UITableViewDataSource {
 
 //MARK: - CryptoListViewController UISearchBarDelegate
 extension CryptoListViewController: UISearchBarDelegate {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+    }
+
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.searchCoins(query: searchText)
     }
@@ -38,6 +46,8 @@ extension CryptoListViewController: UISearchBarDelegate {
         // Reset the filtered list to the original data when cancel is clicked
         viewModel.filteredCoins = viewModel.allCoins
         viewModel.reloadTableView?()
-        searchBar.text = ""  // Clear the search bar
+        searchBar.text = ""
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.resignFirstResponder()
     }
 }

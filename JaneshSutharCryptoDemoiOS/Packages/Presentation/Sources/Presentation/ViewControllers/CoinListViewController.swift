@@ -8,6 +8,7 @@ import Infrastructure
 class CryptoListViewController: UIViewController {
     var viewModel: CryptoListViewModel!
     let tableView = UITableView()
+    private let searchBar = UISearchBar()
     private var selectedFilterOptions: Set<FilterOption> = []
     private var filterView: FilterView?
     private var noDataView: NoDataView?
@@ -38,6 +39,15 @@ class CryptoListViewController: UIViewController {
     }
     
     private func setupUI() {
+        searchBar.delegate = self
+        searchBar.placeholder = Localization.localizedString(
+            for: "search_crypto_coins",
+            defaultValue: "Search Crypto Coins"
+        )
+        searchBar.searchBarStyle = .minimal
+        searchBar.tintColor = .systemBlue
+
+        view.addSubview(searchBar)
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self
@@ -48,9 +58,20 @@ class CryptoListViewController: UIViewController {
     }
     
     private func setupConstraints() {
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: LayoutConstants.mediumMargin),
+            searchBar.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: LayoutConstants.mediumMargin
+            ),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            searchBar.heightAnchor.constraint(equalToConstant: 44),
+            tableView.topAnchor.constraint(
+                equalTo: searchBar.bottomAnchor,
+                constant: LayoutConstants.mediumMargin
+            ),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
@@ -89,21 +110,12 @@ class CryptoListViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.tintColor = .systemBlue
         
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.delegate = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = Localization.localizedString(for: "search_crypto_coins",defaultValue: "Search Crypto Coins")
-        searchController.searchBar.searchBarStyle = .minimal
-        searchController.searchBar.tintColor = .systemBlue
-        navigationItem.searchController = searchController
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "flask"),
             style: .plain,
             target: self,
             action: #selector(showFilterOptions)
         )
-        navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     //MARK: - Filter View Methods
