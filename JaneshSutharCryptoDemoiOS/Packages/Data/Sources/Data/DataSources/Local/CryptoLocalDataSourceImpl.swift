@@ -35,34 +35,32 @@ public actor CryptoLocalDataSourceImpl: CryptoLocalDataSource {
     public func saveCryptoCoins(_ coins: [CryptoCoinEntity]) async throws {
         let context = await coreDataHelper.newBackgroundContext()
 
-        let deletedIDs: [NSManagedObjectID] = try await context.perform {
+        try await context.perform {
             do {
-                let fetchRequest: NSFetchRequest<any NSFetchRequestResult> = CryptoCoinCoreData.fetchRequest()
-                let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-                deleteRequest.resultType = .resultTypeObjectIDs
-                let deleteResult = try context.execute(deleteRequest) as? NSBatchDeleteResult
-                let ids = deleteResult?.result as? [NSManagedObjectID] ?? []
+                let fetchRequest: NSFetchRequest<CryptoCoinCoreData> = CryptoCoinCoreData.fetchRequest()
+                let existingCoins = try context.fetch(fetchRequest)
+                for existingCoin in existingCoins {
+                    context.delete(existingCoin)
+                }
 
                 for coin in coins {
                     _ = coin.toCoreData(context: context)
                 }
-
-                return ids
             } catch {
+                context.rollback()
                 throw LocalStorageError.failedToSave
             }
         }
 
-        // Persist the background context first before updating mainContext
-        try await coreDataHelper.save(context: context)
-
-        // Merge batch-deleted object IDs safely on mainContext's queue
-        if !deletedIDs.isEmpty {
-            let mainContext = await coreDataHelper.mainContext
-            await mainContext.perform {
-                let changes: [AnyHashable: Any] = [NSDeletedObjectsKey: deletedIDs]
-                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [mainContext])
+        // Persist deletions and insertions atomically in one context save;
+        // CoreDataHelper.mainContext merges changes automatically.
+        do {
+            try await coreDataHelper.save(context: context)
+        } catch {
+            await context.perform {
+                context.rollback()
             }
+            throw LocalStorageError.failedToSave
         }
     }
 }
