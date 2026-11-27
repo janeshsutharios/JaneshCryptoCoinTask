@@ -9,7 +9,10 @@ public actor NetworkServiceManager: APIServiceProtocol {
     }
 
     public func fetchCryptoCoins() async throws -> [CryptoCoinEntity] {
-        let endpoint = Endpoint.createGETEndpoint(path: "/crypto/coins", queryItems: [])
+        let endpoint = Endpoint.createGETEndpoint(
+            path: "/janeshsutharios/REST_GET_API/refs/heads/main/crypto-coins.json",
+            queryItems: []
+        )
         do {
             let cryptoCoins: [CryptoCoinEntity] = try await networkManager.request(endpoint: endpoint)
             return cryptoCoins
