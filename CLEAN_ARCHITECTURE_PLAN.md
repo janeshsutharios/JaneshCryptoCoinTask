@@ -71,9 +71,10 @@ flowchart LR
    - `FilterOption`, `LayoutConstants` (including `samllFontSize` typo), and `Spacing` live in `Common`, which is imported by `Data` and `Infrastructure` (violating Common Reuse Principle).
    - `Reachability.swift` in `Common` is unused dead code.
 
-6. **Minor Boundary & Error-Handling Issues**
-   - `CoreDataHelper.swift` has an unused `import Domain`.
+6. **Core Data Error Reporting & Minor Boundary Issues**
+   - `CryptoLocalDataSourceImpl.swift` (line 26–30) catches all Core Data `context.fetch` failures and throws `LocalStorageError.objectNotFound`, conflating a genuine database/store error with a missing record (whereas an empty store returns `[]`).
    - `LocalStorageError` does not conform to `LocalizedError` (it only defines `var localizedDescription: String`, which Swift's `Error.localizedDescription` ignores when typed as `any Error`).
+   - `CoreDataHelper.swift` has an unused `import Domain`.
    - `CryptoListViewModel` passes raw `error.localizedDescription` and hardcoded `"Error"` instead of mapping domain/infrastructure errors into user-facing presentation messages.
 
 ---
@@ -143,7 +144,11 @@ public protocol CryptoRepositoryProtocol: Sendable {
 - Remove unused `import Domain`.
 
 #### [MODIFY] `JaneshSutharCryptoDemoiOS/Packages/Data/Sources/Data/DataSources/Local/LocalStorageError.swift`
+- Add `case fetchFailed(any Error)` (and/or `saveFailed(any Error)`) so database failures are distinct from empty results or missing objects.
 - Conform `LocalStorageError` to `LocalizedError` (`var errorDescription: String?`).
+
+#### [MODIFY] `JaneshSutharCryptoDemoiOS/Packages/Data/Sources/Data/DataSources/Local/CryptoLocalDataSourceImpl.swift`
+- In `fetchCryptoCoins()`, throw `LocalStorageError.fetchFailed(error)` instead of `LocalStorageError.objectNotFound` when `context.fetch` fails, preserving the underlying Core Data error for diagnosis.
 
 ---
 
