@@ -7,6 +7,6 @@
 import Foundation
 import Domain
 
-public protocol APIServiceProtocol {
+public protocol APIServiceProtocol: Sendable {
     func fetchCryptoCoins() async throws -> [CryptoCoinEntity]
 }

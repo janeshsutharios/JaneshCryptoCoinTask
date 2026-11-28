@@ -5,14 +5,7 @@
 //  Created by Janesh Suthar
 //
 
-import UIKit
+import Foundation
 
-extension UIViewController {
-    public func showAlert(message: String, title: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: Localization.localizedString(for: "ok",defaultValue: "Ok"), style: .default))
-        DispatchQueue.main.async {
-            self.present(alert, animated: true)
-        }
-    }
-}
+// Platform-agnostic extensions belong in Common.
+// UIKit extensions (e.g., UIViewController alerts) live in the Presentation package.

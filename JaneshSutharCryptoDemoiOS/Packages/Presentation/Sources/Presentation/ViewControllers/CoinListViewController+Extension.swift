@@ -7,14 +7,14 @@
 
 import UIKit
 
-//MARK: - CryptoListViewController UITableViewDelegate 
+// MARK: - CryptoListViewController UITableViewDelegate
 extension CryptoListViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.filteredCoins.count
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CryptoTableViewCell", for: indexPath) as? CryptoTableViewCell else {
             return UITableViewCell()
         }
@@ -27,25 +27,22 @@ extension CryptoListViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-//MARK: - CryptoListViewController UISearchBarDelegate
+// MARK: - CryptoListViewController UISearchBarDelegate
 extension CryptoListViewController: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    public func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
     }
 
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+    public func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(false, animated: true)
     }
 
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         viewModel.searchCoins(query: searchText)
     }
-    
-    // Handle Cancel Button Click
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        // Reset the filtered list to the original data when cancel is clicked
-        viewModel.filteredCoins = viewModel.allCoins
-        viewModel.reloadTableView?()
+
+    public func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        viewModel.searchCoins(query: "")
         searchBar.text = ""
         searchBar.setShowsCancelButton(false, animated: true)
         searchBar.resignFirstResponder()

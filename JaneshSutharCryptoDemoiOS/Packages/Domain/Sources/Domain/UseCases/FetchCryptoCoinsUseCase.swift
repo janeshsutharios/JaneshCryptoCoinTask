@@ -1,5 +1,5 @@
 //
-//  GetCryptoCoinsUseCase.swift
+//  FetchCryptoCoinsUseCase.swift
 //  CryptoCoin
 //
 //  Created by Janesh Suthar
@@ -7,25 +7,29 @@
 
 import Foundation
 
-public actor FetchCryptoCoinsUseCase {
+public protocol FetchCryptoCoinsUseCaseProtocol: Sendable {
+    func execute() async throws -> [CryptoCoinEntity]
+    func execute(fromNetwork: Bool) async throws -> [CryptoCoinEntity]
+}
+
+public actor FetchCryptoCoinsUseCase: FetchCryptoCoinsUseCaseProtocol {
     private let repository: CryptoRepositoryProtocol
 
     public init(repository: CryptoRepositoryProtocol) {
         self.repository = repository
     }
 
-    // Fetch data either from network or local based on the flag
+    /// Fetches crypto coins using the repository's network-first with cache-fallback policy.
+    public func execute() async throws -> [CryptoCoinEntity] {
+        try await repository.fetchCryptoCoins()
+    }
+
+    /// Fetches data explicitly from network or cache; caching is owned by the repository.
     public func execute(fromNetwork: Bool) async throws -> [CryptoCoinEntity] {
         if fromNetwork {
-            // Fetch from network and save to local storage
-            let networkCoins = try await repository.getCryptoCoinsFromNetwork()
-            try await repository.saveCryptoCoinsIntoCache(networkCoins)
-            return networkCoins
+            return try await repository.getCryptoCoinsFromNetwork()
         } else {
-            // Fetch from local storage
-            let localCoins = try await repository.getCryptoCoinsFromCache()
-            return localCoins
+            return try await repository.getCryptoCoinsFromCache()
         }
     }
 }
-

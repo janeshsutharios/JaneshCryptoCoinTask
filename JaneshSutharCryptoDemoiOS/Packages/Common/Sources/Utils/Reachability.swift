@@ -1,25 +1,30 @@
 import Darwin
 import SystemConfiguration
 
-public class Reachability {
-    public static func isConnectedToNetwork() -> Bool {
+public protocol NetworkReachabilityProtocol: Sendable {
+    func isConnectedToNetwork() -> Bool
+}
 
+public final class Reachability: NetworkReachabilityProtocol, @unchecked Sendable {
+    public init() {}
+
+    public func isConnectedToNetwork() -> Bool {
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
         zeroAddress.sin_family = sa_family_t(AF_INET)
 
-        let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
-                SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
             }
-        }
+        }) else { return false }
 
         var flags = SCNetworkReachabilityFlags()
-        if !SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) {
+        guard SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) else {
             return false
         }
         let isReachable = (flags.rawValue & UInt32(kSCNetworkFlagsReachable)) != 0
         let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
-        return (isReachable && !needsConnection)
+        return isReachable && !needsConnection
     }
 }
